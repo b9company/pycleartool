@@ -1,0 +1,29 @@
+Metadata-Version: 1.0
+Name: pycleartool
+Version: 2005.01
+Summary: Python Extension to ClearCase
+Home-page: http://rubycube.net/ressources/pycleartool/
+Author: Vincent Besanceney
+Author-email: vincent {at} rubycube {dot} net
+License: GNU General Public License
+Description: Python Extension to ClearCase
+        
+        Pycleartool is a Python extension that provides a high-level interface to `IBM
+        Rational ClearCase`_, suitable for scripting solutions.  Pycleartool links
+        directly against ClearCase libraries, preventing you from extra-processing
+        usually encountered in scripts that interact with ClearCase, where the
+        creation of a cleartool subprocess is required to handle a ClearCase request.
+        See the ``README`` file for more information.
+        
+        .. _IBM Rational ClearCase:
+        http://www.ibm.com/software/awdtools/clearcase/index.html
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: POSIX :: SunOS/Solaris
+Classifier: Programming Language :: C
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Libraries :: Python Modules

@@ -1,0 +1,157 @@
+===================
+README: Pycleartool
+===================
+
+:Author: Vincent Besanceney
+:Contact: vincent {at} rubycube {dot} net
+:Date: Sun Apr 24 12:27:32 2005
+:Copyright: GNU General Public License (GPL)
+
+.. contents:: Table of Contents
+
+
+Introduction
+============
+
+Pycleartool is a Python extension that provides a high-level interface to `IBM
+Rational ClearCase`_, suitable for scripting solutions.  Pycleartool links
+directly against ClearCase libraries, preventing you from extra-processing
+usually encountered in scripts that interact with ClearCase, where the
+creation of a cleartool subprocess is required to handle a ClearCase request.
+
+.. _IBM Rational ClearCase:
+   http://www.ibm.com/software/awdtools/clearcase/index.html
+
+
+System Requirements
+===================
+
+The table below summarizes the basic platform, hardware, and software
+requirements for Pycleartool to build, install, and run.
+
+.. table:: Pycleartool System Requirements
+
+   +---------------+------------------+------------------+-----------------+
+   | Platform      | System           | Python           | ClearCase       |
+   +===============+==================+==================+=================+
+   | SPARC         | Solaris 7        | 2.2 or higher    | 4.1 or higher   |
+   |               | Solaris 8        |                  |                 |
+   |               | Solaris 9        |                  |                 |
+   +---------------+------------------+------------------+-----------------+
+   | I86           | Linux RH 6.2     | 2.2 or higher    | 4.1 or higher   |
+   |               | Linux RH 7.0     |                  |                 |
+   |               | Linux RH 7.1     |                  |                 |
+   |               | Linux RH 7.2     |                  |                 |
+   +---------------+------------------+------------------+-----------------+
+
+
+What's New
+==========
+
+This section describes new features, restrictions, guidelines, and other
+changes in version 2005.01 of Pycleartool.
+
+New Features
+------------
+
+Pycleartool version 2005.01 is the initial release of Pycleartool.
+Pycleartool comes with the following new features:
+
+- Support of SPARC/Solaris platforms.
+- Support of I86/Linux platforms.
+- Access to ClearCase subcommands through the cleartool.cmd() function.
+- Application name used by ClearCase subsystem can be customized through the
+  cleartool.set_app_name() function.
+- ClearCase version used to build the Pycleartool extension is available
+  through the cleartool.version() function.
+
+Restrictions and Guidelines
+---------------------------
+
+SPARC/Solaris
+.............
+
+Pycleartool uses a Sun interposer implemented in ``libzuba.so`` to tell the
+runtime loader to load RPC functions from the correct library.  However,
+interposers are broken on Solaris 8 and 9 by some recent (as of April 23,
+2005) Solaris patches.  See Sun defect 5105601:
+
+    "ld.so.1 gets a little too enthusiastic with interposition".
+
+If Pycleartool is broken by one of the patches below, or one of the
+corresponding Solaris 2.8 patches, it may be possible to set the
+``LD_PRELOAD`` environment variable to ``/usr/ucblib/librpcsoc.so`` to run
+Pycleartool.
+
+.. table:: Solaris 9 Patch Level Impact on Pycleartool
+
+   +-------------------------+---------------------------------------------+
+   | Patch Number            | Does Pycleartool work?                      |
+   +=========================+=============================================+
+   | 112963-07               | Yes                                         |
+   +-------------------------+---------------------------------------------+
+   | 112963-09               | Yes                                         |
+   +-------------------------+---------------------------------------------+
+   | 112963-12               | Yes                                         |
+   +-------------------------+---------------------------------------------+
+   | 112963-13               | No                                          |
+   +-------------------------+---------------------------------------------+
+   | 112963-14               | No                                          |
+   +-------------------------+---------------------------------------------+
+   | 112963-17               | Yes                                         |
+   +-------------------------+---------------------------------------------+
+   | 112963-18               | No                                          |
+   +-------------------------+---------------------------------------------+
+   | 112963-19               | No                                          |
+   +-------------------------+---------------------------------------------+
+
+
+Installation
+============
+
+See the ``INSTALL`` file.
+
+
+Documentation
+=============
+
+Pycleartool is self-documented through _doc__ strings.  Once Pycleartool is
+installed, you can gain access to the documentation with the ``help()``
+function, as follows::
+
+    >>> import cleartool
+    >>> help(cleartool)
+
+
+Licensing
+=========
+
+See the file called ``LICENSE``.
+
+
+Status of Change Requests
+=========================
+
+.. table:: Pycleartool Known Problems
+
+   +----------------+------------------------------------------------------+
+   | Problem Number | Description                                          |
+   +================+======================================================+
+   | -              |                                                      |
+   +----------------+------------------------------------------------------+
+
+.. table:: Problems Fixed in This Release
+
+   +----------------+------------------------------------------------------+
+   | Problem Number | Description                                          |
+   +================+======================================================+
+   | -              |                                                      |
+   +----------------+------------------------------------------------------+
+
+.. table:: Disposition of Problems Reported in Previous Releases
+
+   +----------------+----------------+-------------------------------------+
+   | Problem Number | Status         | Description                         |
+   +================+================+=====================================+
+   | N/A            |                |                                     |
+   +----------------+----------------+-------------------------------------+

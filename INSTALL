@@ -1,0 +1,105 @@
+====================
+INSTALL: Pycleartool
+====================
+
+:Author: Vincent Besanceney
+:Contact: vincent {at} rubycube {dot} net
+:Date: Sun Apr 24 16:45:46 2005
+:Copyright: GNU General Public License (GPL)
+
+.. contents:: Table of Contents
+
+
+This document describes the steps to install Pycleartool.  This document is
+intended for use by ClearCase end-users or administrators, who need to install
+a Python interface to ClearCase site-wise or for personal purposes.  
+
+
+Introduction
+============
+
+See the ``README`` file to determine compatibility of your platform and
+software before you install Pycleartool.
+
+Pycleartool uses the Python Distribution Utilities (distutils) for the build
+and install steps.  If you want to tweak and play with the installation
+process, I recommend you to read the `Installing Python Modules`_ document
+first.
+
+.. _Installing Python Modules:
+   http://docs.python.org/inst/inst.html
+
+
+Installing Pycleartool to the Standard Location
+===============================================
+
+From the distribution root directory (i.e. the top-level subdirectory that the
+Pycleartool distribution unpacks into), enter the following command at the
+prompt (on Windows, open a command prompt window from the distribution root
+directory)::
+
+    python setup.py install
+
+This builds and installs the distribution in one run.  The module drops in the
+standard Python location for third-party modules.
+
+
+Installing Pycleartool to an Alternate Location
+===============================================
+
+You may want to install Pycleartool to a location other than the standard
+location.  For example, you might not have permission to write to the standard
+third-party module directory, or you might maintain a personal stash of Python
+modules.  The Distutils install command allows you to pick and choose whatever
+installation scheme best fits your needs.
+
+If you want to install Pycleartool into your home directory according to the
+home scheme, enter the following command at the prompt::
+
+    python setup.py install --home
+
+If you want to install Pycleartool in whatever directory according to the
+prefix scheme, enter the following command at the prompt::
+
+    python setup.py install --prefix=custom-directory
+
+
+Troubleshooting
+===============
+
+Unix: unable to execute cc: No such file or directory
+-----------------------------------------------------
+
+If it happens that the compiler picked by Python to build Pycleartool is not
+available on your box (e.g. because Python was built using the Sun WorkShop
+compiler), you can provide the setup script with another compiler.  
+
+For example, if you want to use GNU GCC to build Pycleartool, enter the
+following command at the prompt (assuming ksh-like shell)::
+
+    CC=gcc LDSHARED='gcc -G' python setup.py install
+
+Prior to Python version 2.4, ``LDSHARED`` cannot be set on the command-line.
+Another solution is to create a symbolic to whatever compiler you want to use
+and set the ``PATH`` environment variable accordingly.  Assuming that Python
+expects to find a compiler named ``cc``::
+
+    ln -s /opt/sfw/gcc-3/bin/gcc cc
+    export PATH=$PATH:.
+    python setup.py install
+
+ImportError: No module named cleartool
+--------------------------------------
+
+You may encounter this error if you installed Pycleartool to a non-standard
+location::
+
+    >>> import cleartool
+    ...
+    ImportError: No module named cleartool
+
+Read the section `Modifying Python's Search Path`_ from the `Installing Python
+Modules`_ document to deal with this error.
+
+.. _Modifying Python's Search Path:
+   http://docs.python.org/inst/search-path.html#SECTION000410000000000000000
