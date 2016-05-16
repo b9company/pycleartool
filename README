@@ -3,9 +3,9 @@ README: Pycleartool
 ===================
 
 :Author: Vincent Besanceney
-:Contact: pycleartool@rubycube.net
-:Date: Sat May 28 18:33:58 2005
-:Copyright: GNU General Public License (GPL)
+:Contact: support@rubycube.fr
+:Date: $DateTime: 2007/06/06 22:24:08 $
+:Copyright: (c) 2007, Rubycube. All rights reserved.
 
 .. contents:: Table of Contents
 
@@ -37,6 +37,7 @@ requirements for Pycleartool to build, install, and run.
    | SPARC        | Solaris 7       | 2.2 or higher   | 4.1 or higher     |
    |              | Solaris 8       |   "       "     |   "       "       |
    |              | Solaris 9       |   "       "     |   "       "       |
+   |              | Solaris 10      |   "       "     |   "       "       |
    +--------------+-----------------+-----------------+-------------------+
    | I86          | Linux RH 6.2    | 2.2 or higher   | 4.1 or higher     |
    |              | Linux RH 7.0    |   "       "     |   "       "       |
@@ -53,20 +54,20 @@ What's New
 ==========
 
 This section describes new features, restrictions, guidelines, and other
-changes in version 2005.02 of Pycleartool.
+changes in version 2007.01 of Pycleartool.
 
 New Features
 ------------
 
 Pycleartool comes with the following new features:
 
-- Support of I86/Windows platform.
+- Support of IBM Rational ClearCase 7.0.
 
 Restrictions and Guidelines
 ---------------------------
 
-SPARC/Solaris
-.............
+SPARC/Solaris with IBM Rational ClearCase versions prior to 7.0
+...............................................................
 
 Pycleartool uses a Sun interposer implemented in ``libzuba.so`` to tell the
 runtime loader to load RPC functions from the correct library.  However,

@@ -1,21 +1,39 @@
 #!/usr/bin/env python
 
-# setup.py - Setup script to Pycleartool
-# Copyright (c) 2005  Vincent Besanceney
+# ============================================================================
+# Copyright (c) 2005, 2007, Rubycube.
+# All rights reserved.
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# 1. Redistributions of source code must retain the above copyright notice,
+#    this list of conditions and the following disclaimer.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# 3. Neither the name of Rubycube nor the names of its contributors may be
+#    used to endorse or promote products derived from this software without
+#    specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+# LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+# CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
+# ============================================================================
+
+#
+# ident @(#)$Id: //dev/lib/pycleartool/setup.py#4 $
+#
 
 '''Python Extension to ClearCase
 
@@ -128,7 +146,8 @@ def _win32_get_ordinal(libpname, symbol):
 class ClearcaseConfig:
 
     home = '/usr/atria' # ClearCase default home directory
-    ver = [0, 0, 0] # ClearCase release
+    ver = [0, 0, 0]     # ClearCase release
+    _ver = [0, 0, 0]    # ClearCase version, for internal purpose.
     libs = ['atriacmdsyn', 'atriacmd', 'atriasumcmd', 'atriasum',
         'atriamsadm', 'atriamntrpc', 'atriacm', 'atriavob', 'atriaview',
         'atriacm', 'atriadbrpc', 'atriatirpc', 'atriaxdr', 'atriamvfs',
@@ -175,18 +194,18 @@ class ClearcaseConfig:
         f.close()
         self.ver = self.ver.split(' ')[2]
         self.ver = _split_version(self.ver)
-        self.ver += [0] * (3-len(self.ver)) # Ensure the version is always
-                                            # three-digit long
-        ccase_curr_ver = self.ver[:]
-        if ccase_curr_ver[0] >= 2000:
-            ccase_curr_ver.pop(0) # New version style, get rid of the leading
-                                  # number.
+        self.ver += [0] * (4-len(self.ver)) # Ensure the version is always
+                                            # four-digit long
+        self._ver = self.ver[:]
+        if self._ver[0] >= 2000:
+            self._ver.pop(0) # 2000 version style, get rid of the leading
+                             # number.
         # Check this version against the minimum required version
         ccase_xpct_ver = [4, 2]
-        if ccase_curr_ver < ccase_xpct_ver:
+        if self._ver < ccase_xpct_ver:
             raise SetupError(ERR_MSG_BADVER % ('ClearCase',
                 _fmt_version(ccase_xpct_ver),
-                _fmt_version(ccase_curr_ver)))
+                _fmt_version(self._ver)))
 
     def get_incs(self):
         return [ os.path.join(self.home, 'include') ]
@@ -198,10 +217,12 @@ class ClearcaseConfig:
             return [ os.path.join(self.home, 'shlib') ]
 
     def get_libs(self):
-        if self.ver[0] < 2003:
-            return self.libs
-        else:
-            return self.libs + self.libs6
+        libs = self.libs
+        if self._ver[0] > 5:
+            libs += self.libs6
+        if self._ver[0] > 6:
+            libs.remove('atriatirpc')
+        return libs
 
 # -----------------------------------------------------------------------------
 # Specialized extension builder
@@ -216,7 +237,17 @@ class build_ext(_build_ext):
             raise SetupError(ERR_MSG_BADVER % ('Solaris',
                 _fmt_version(sunos_xpct_ver),
                 _fmt_version(sunos_curr_ver)))
-        # Build libzuba
+        # libCrun kludge
+        self.mkpath(self.build_temp)
+        libcrun_pname = os.path.join(self.build_temp, 'libCrun.so')
+        if os.path.exists(libcrun_pname):
+            os.unlink(libcrun_pname)
+        os.symlink('/usr/lib/libCrun.so.1', libcrun_pname)
+
+    def build_libzuba(self):
+        # Due to changes in ClearCase 7, librpcsoc.so is no longer used.  This
+        # means that ClearCase 7 does not need the aux_zuba.c.  Because we need
+        # backward compatibility that code needs to stay in for now.
         zuba_cc = new_compiler()
         sysconfig.customize_compiler(zuba_cc)
         zuba_cc.set_executables(
@@ -227,11 +258,6 @@ class build_ext(_build_ext):
         zuba_cc.link_shared_object(obj,
             os.path.join(self.build_lib, 'libzuba.so'),
             build_temp=self.build_temp)
-        # libCrun kludge
-        libcrun_pname = os.path.join(self.build_temp, 'libCrun.so')
-        if os.path.exists(libcrun_pname):
-            os.unlink(libcrun_pname)
-        os.symlink('/usr/lib/libCrun.so.1', libcrun_pname)
 
     def build_linux_deps(self):
         # XXX Should provide some sanity checks...
@@ -275,6 +301,7 @@ class build_ext(_build_ext):
         for ext in self.extensions:
             if ext.name == 'cleartool':
                 # Configure cleartool extension
+                ccase = ClearcaseConfig()
                 ext.include_dirs.append(sysconfig.get_python_inc())
                 ext.library_dirs += [ self.build_lib, self.build_temp]
                 # Deal with platform dependencies first
@@ -282,8 +309,11 @@ class build_ext(_build_ext):
                     self.build_sunos_deps()
                     ext.define_macros += [('SVR4', None)]
                     ext.extra_link_args += ['-t', '-ucmdsyn_proc_table']
-                    ext.libraries += ['c', 'w', 'Crun', 'zuba']
+                    ext.libraries += ['c', 'w', 'Crun']
                     ext.runtime_library_dirs += ['$ORIGIN']
+                    if ccase._ver[0] < 7:
+                        self.build_libzuba()
+                        ext.libraries += ['zuba']
                 elif sys.platform.startswith('linux'):
                     self.build_linux_deps()
                     ext.define_macros += [('ATRIA_LINUX', None)]
@@ -300,11 +330,11 @@ class build_ext(_build_ext):
                 else:
                     raise SetupError('This platform is not supported by ClearCase.')
                 # ClearCase settings
-                ccase = ClearcaseConfig()
                 ext.define_macros += [
                     ('CCASE_VER_MAJOR', ccase.ver[0]),
                     ('CCASE_VER_MINOR', ccase.ver[1]),
                     ('CCASE_VER_PATCH', ccase.ver[2]),
+                    ('CCASE_VER_FIXPACK', ccase.ver[3]),
                     ]
                 if not sys.platform.startswith('win'):
                     ext.libraries += ccase.get_libs()
@@ -316,16 +346,16 @@ class build_ext(_build_ext):
 # Setup
 
 MOD_NAME = 'pycleartool'
-MOD_VERSION = '2005.02'
+MOD_VERSION = '2007.01'
 MOD_AUTHOR = 'Vincent Besanceney'
-MOD_AUTHOR_EMAIL = 'pycleartool@rubycube.net'
-MOD_LICENSE = 'GNU General Public License'
+MOD_AUTHOR_EMAIL = 'support@rubycube.fr'
+MOD_LICENSE = 'BSD'
 MOD_URL = 'http://rubycube.net/ressources/pycleartool/'
 MOD_CLASSIFIERS = '''
 Development Status :: 5 - Production/Stable
 Intended Audience :: Developers
 Intended Audience :: System Administrators
-License :: OSI Approved :: GNU General Public License (GPL)
+License :: OSI Approved :: BSD License
 Operating System :: Microsoft :: Windows :: Windows NT/2000
 Operating System :: POSIX :: Linux
 Operating System :: POSIX :: SunOS/Solaris
