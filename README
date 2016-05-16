@@ -3,8 +3,8 @@ README: Pycleartool
 ===================
 
 :Author: Vincent Besanceney
-:Contact: vincent {at} rubycube {dot} net
-:Date: Sun Apr 24 12:27:32 2005
+:Contact: pycleartool@rubycube.net
+:Date: Sat May 28 18:33:58 2005
 :Copyright: GNU General Public License (GPL)
 
 .. contents:: Table of Contents
@@ -31,39 +31,36 @@ requirements for Pycleartool to build, install, and run.
 
 .. table:: Pycleartool System Requirements
 
-   +---------------+------------------+------------------+-----------------+
-   | Platform      | System           | Python           | ClearCase       |
-   +===============+==================+==================+=================+
-   | SPARC         | Solaris 7        | 2.2 or higher    | 4.1 or higher   |
-   |               | Solaris 8        |                  |                 |
-   |               | Solaris 9        |                  |                 |
-   +---------------+------------------+------------------+-----------------+
-   | I86           | Linux RH 6.2     | 2.2 or higher    | 4.1 or higher   |
-   |               | Linux RH 7.0     |                  |                 |
-   |               | Linux RH 7.1     |                  |                 |
-   |               | Linux RH 7.2     |                  |                 |
-   +---------------+------------------+------------------+-----------------+
+   +--------------+-----------------+-----------------+-------------------+
+   | Platform     | System          | Python          | ClearCase         |
+   +==============+=================+=================+===================+
+   | SPARC        | Solaris 7       | 2.2 or higher   | 4.1 or higher     |
+   |              | Solaris 8       |   "       "     |   "       "       |
+   |              | Solaris 9       |   "       "     |   "       "       |
+   +--------------+-----------------+-----------------+-------------------+
+   | I86          | Linux RH 6.2    | 2.2 or higher   | 4.1 or higher     |
+   |              | Linux RH 7.0    |   "       "     |   "       "       |
+   |              | Linux RH 7.1    |   "       "     |   "       "       |
+   |              | Linux RH 7.2    |   "       "     |   "       "       |
+   +--------------+-----------------+-----------------+-------------------+
+   | I86          | Windows XP Pro  | 2.2 or higher   | 4.2 or higher     |
+   |              | Windows 2000    |   "       "     |   "       "       |
+   |              | Windows NT 4.0  |   "       "     |   "       "       |
+   +--------------+-----------------+-----------------+-------------------+
 
 
 What's New
 ==========
 
 This section describes new features, restrictions, guidelines, and other
-changes in version 2005.01 of Pycleartool.
+changes in version 2005.02 of Pycleartool.
 
 New Features
 ------------
 
-Pycleartool version 2005.01 is the initial release of Pycleartool.
 Pycleartool comes with the following new features:
 
-- Support of SPARC/Solaris platforms.
-- Support of I86/Linux platforms.
-- Access to ClearCase subcommands through the cleartool.cmd() function.
-- Application name used by ClearCase subsystem can be customized through the
-  cleartool.set_app_name() function.
-- ClearCase version used to build the Pycleartool extension is available
-  through the cleartool.version() function.
+- Support of I86/Windows platform.
 
 Restrictions and Guidelines
 ---------------------------
@@ -153,5 +150,5 @@ Status of Change Requests
    +----------------+----------------+-------------------------------------+
    | Problem Number | Status         | Description                         |
    +================+================+=====================================+
-   | N/A            |                |                                     |
+   | -              |                |                                     |
    +----------------+----------------+-------------------------------------+

@@ -1,10 +1,10 @@
 Metadata-Version: 1.0
 Name: pycleartool
-Version: 2005.01
+Version: 2005.02
 Summary: Python Extension to ClearCase
 Home-page: http://rubycube.net/ressources/pycleartool/
 Author: Vincent Besanceney
-Author-email: vincent {at} rubycube {dot} net
+Author-email: pycleartool@rubycube.net
 License: GNU General Public License
 Description: Python Extension to ClearCase
         
@@ -22,6 +22,7 @@ Classifier: Development Status :: 5 - Production/Stable
 Classifier: Intended Audience :: Developers
 Classifier: Intended Audience :: System Administrators
 Classifier: License :: OSI Approved :: GNU General Public License (GPL)
+Classifier: Operating System :: Microsoft :: Windows :: Windows NT/2000
 Classifier: Operating System :: POSIX :: Linux
 Classifier: Operating System :: POSIX :: SunOS/Solaris
 Classifier: Programming Language :: C
